@@ -1,0 +1,46 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  .search-form {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .search-form input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+  }
+
+  .search-form button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+  }
+  
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+  }
+  
+  .photo-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+
+  .info {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .info-item {
+    margin-bottom: 5px;
+  }
