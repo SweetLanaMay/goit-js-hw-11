@@ -1,0 +1,2 @@
+.container{max-width:800px;margin:0 auto;padding:20px}h1{text-align:center}.search-form{margin-bottom:20px;display:flex}.search-form input[type=text]{flex-grow:1;padding:10px}.search-form button{color:#fff;background-color:#4caf50;border:none;padding:10px 20px}.gallery{grid-gap:20px;grid-template-columns:repeat(3,1fr);display:grid}.photo-card{border:1px solid #ddd;padding:10px}.info{text-align:center;margin-top:10px}.info-item{margin-bottom:5px}
+/*# sourceMappingURL=index.aadd9026.css.map */
