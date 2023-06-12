@@ -11,7 +11,8 @@ refs.searchForm.addEventListener('submit', onSearch);
 function onSearch(e) {
   e.preventDefault();
 
-  const searchQuery = e.target.elements.searchQuery.value.trim();
+  const searchQuery = e.currentTarget.elements.searchQuery.value.trim();
+  console.log(searchQuery)
   if (searchQuery === '') return;
   currentSearchQuery = searchQuery;
   page = 1;
@@ -38,8 +39,8 @@ refs.loadMoreButton.addEventListener('click', loadMoreImages);
 function loadMoreImages() {
   searchImages(currentSearchQuery, page, prePage)
     .then(data => {
-      data.hits.forEach(image => {
-        createPhotoCard(image);
+      data.hits.forEach(hits => {
+        createPhotoCard(hits);
       });
       page++;
     })
@@ -51,23 +52,25 @@ function loadMoreImages() {
     });
 }
 
+
+
 const createPhotoCard = hits => {
   const markupPhotoCard = `<div class="photo-card">
-  <img src="${hits[0].webformatURL}" 
-  alt="${hits[0].tags}" 
+  <img src="${hits.webformatURL}" 
+  alt="${hits.tags}" 
   loading="lazy" />
   <div class="info">
     <p class="info-item">
-      <b>${hits[0].likes}</b>
+      <b>${hits.likes}</b>
     </p>
     <p class="info-item">
-      <b>${hits[0].views}</b>
+      <b>${hits.views}</b>
     </p>
     <p class="info-item">
-      <b>${hits[0].comments}</b>
+      <b>${hits.comments}</b>
     </p>
     <p class="info-item">
-      <b>${hits[0].downloads}</b>
+      <b>${hits.downloads}</b>
     </p>
   </div>
 </div>`;
