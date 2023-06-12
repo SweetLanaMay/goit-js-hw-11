@@ -1,25 +1,26 @@
 import { searchImages } from './api.js';
 import Notiflix from 'notiflix';
+import getRefs from './refs.js';
 
-const searchForm = document.getElementById('search-form');
-const gallery = document.querySelector('.gallery');
-const loadMoreButton = document.querySelector('.load-more');
-let page = 1;
-let currentSearchQuery = '';
+const refs = getRefs();
 
-searchForm.addEventListener('submit', e => {
+refs.searchForm.addEventListener('submit', onSearch);
+
+function onSearch(e) {
   e.preventDefault();
+
   const searchQuery = e.target.elements.searchQuery.value.trim();
   if (searchQuery === '') return;
   currentSearchQuery = searchQuery;
-  page = 1;
+  refs.page = 1;
   clearGallery();
-  searchImages(searchQuery, page, 40)
+  refs.loadMoreButton.classList.add('hidden');
+  searchImages(searchQuery, refs.page, refs.prePage)
     .then(data => {
       data.hits.forEach(image => {
         createPhotoCard(image);
       });
-      showLoadMoreButton();
+      refs.loadMoreButton.classList.remove('hidden');
       page++;
     })
     .catch(error => {
@@ -28,10 +29,12 @@ searchForm.addEventListener('submit', e => {
         'Oops! Something went wrong! Try reloading the page!'
       );
     });
-});
+}
 
-loadMoreButton.addEventListener('click', () => {
-  searchImages(currentSearchQuery, page, 40)
+refs.loadMoreButton.addEventListener('click', loadMoreImages);
+
+function loadMoreImages() {
+  searchImages(currentSearchQuery, refs.page, refs.prePage)
     .then(data => {
       data.hits.forEach(image => {
         createPhotoCard(image);
@@ -44,51 +47,32 @@ loadMoreButton.addEventListener('click', () => {
         'Oops! Something went wrong! Try reloading the page!'
       );
     });
-});
-
-function createPhotoCard(image) {
-  const photoCard = document.createElement('div');
-  photoCard.classList.add('photo-card');
-
-  const img = document.createElement('img');
-  img.src = image.webformatURL;
-  img.alt = image.tags;
-  img.loading = 'lazy';
-
-  const info = document.createElement('div');
-  info.classList.add('info');
-
-  const likes = createInfoItem('Likes', image.likes);
-  const views = createInfoItem('Views', image.views);
-  const comments = createInfoItem('Comments', image.comments);
-  const downloads = createInfoItem('Downloads', image.downloads);
-
-  info.appendChild(likes);
-  info.appendChild(views);
-  info.appendChild(comments);
-  info.appendChild(downloads);
-
-  photoCard.appendChild(img);
-  photoCard.appendChild(info);
-
-  gallery.appendChild(photoCard);
 }
 
-function createInfoItem(label, value) {
-  const infoItem = document.createElement('p');
-  infoItem.classList.add('info-item');
-  infoItem.innerHTML = `<b>${label}:</b> ${value}`;
-  return infoItem;
-}
+const createPhotoCard = image => {
+  const markupPhotoCard = `<div class="photo-card">
+  <img src="${image.hits[0].webformatURL}" 
+  alt="${image.hits[0].tags}" 
+  loading="lazy" />
+  <div class="info">
+    <p class="info-item">
+      <b>${image.hits[0].likes}</b>
+    </p>
+    <p class="info-item">
+      <b>${image.hits[0].views}</b>
+    </p>
+    <p class="info-item">
+      <b>${image.hits[0].comments}</b>
+    </p>
+    <p class="info-item">
+      <b>${image.hits[0].downloads}</b>
+    </p>
+  </div>
+</div>`;
+
+  refs.gallery.innerHTML = markupPhotoCard;
+};
 
 function clearGallery() {
-  gallery.innerHTML = '';
-}
-
-function showLoadMoreButton() {
-  loadMoreButton.style.display = 'block';
-}
-
-function hideLoadMoreButton() {
-  loadMoreButton.style.display = 'none';
+  refs.gallery.innerHTML = '';
 }

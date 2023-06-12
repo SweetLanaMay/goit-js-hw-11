@@ -30,9 +30,10 @@
   }
   
   .gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    text-align: center;
   }
   
   .photo-card {
@@ -47,4 +48,8 @@
   
   .info-item {
     margin-bottom: 5px;
+  }
+
+  .hidden {
+    display: none;
   }

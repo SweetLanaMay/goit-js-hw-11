@@ -17,7 +17,7 @@ export async function searchImages(query, page, perPage) {
         Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
       }
     }
-
+   
     return data;
   } catch (error) {
     console.log(error);
