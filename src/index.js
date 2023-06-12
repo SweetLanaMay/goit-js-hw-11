@@ -1,7 +1,9 @@
 import { searchImages } from './api.js';
 import Notiflix from 'notiflix';
 import getRefs from './refs.js';
-
+let page = 1;
+let prePage = 40;
+let currentSearchQuery = '';
 const refs = getRefs();
 
 refs.searchForm.addEventListener('submit', onSearch);
@@ -12,10 +14,10 @@ function onSearch(e) {
   const searchQuery = e.target.elements.searchQuery.value.trim();
   if (searchQuery === '') return;
   currentSearchQuery = searchQuery;
-  refs.page = 1;
+  page = 1;
   clearGallery();
   refs.loadMoreButton.classList.add('hidden');
-  searchImages(searchQuery, refs.page, refs.prePage)
+  searchImages(searchQuery, page, prePage)
     .then(data => {
       data.hits.forEach(image => {
         createPhotoCard(image);
@@ -34,7 +36,7 @@ function onSearch(e) {
 refs.loadMoreButton.addEventListener('click', loadMoreImages);
 
 function loadMoreImages() {
-  searchImages(currentSearchQuery, refs.page, refs.prePage)
+  searchImages(currentSearchQuery, page, prePage)
     .then(data => {
       data.hits.forEach(image => {
         createPhotoCard(image);
@@ -49,23 +51,23 @@ function loadMoreImages() {
     });
 }
 
-const createPhotoCard = image => {
+const createPhotoCard = hits => {
   const markupPhotoCard = `<div class="photo-card">
-  <img src="${image.hits[0].webformatURL}" 
-  alt="${image.hits[0].tags}" 
+  <img src="${hits[0].webformatURL}" 
+  alt="${hits[0].tags}" 
   loading="lazy" />
   <div class="info">
     <p class="info-item">
-      <b>${image.hits[0].likes}</b>
+      <b>${hits[0].likes}</b>
     </p>
     <p class="info-item">
-      <b>${image.hits[0].views}</b>
+      <b>${hits[0].views}</b>
     </p>
     <p class="info-item">
-      <b>${image.hits[0].comments}</b>
+      <b>${hits[0].comments}</b>
     </p>
     <p class="info-item">
-      <b>${image.hits[0].downloads}</b>
+      <b>${hits[0].downloads}</b>
     </p>
   </div>
 </div>`;
