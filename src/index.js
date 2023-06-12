@@ -1,4 +1,4 @@
-import searchImages from './api.js';
+import { searchImages } from './api.js';
 import Notiflix from 'notiflix';
 
 const searchForm = document.getElementById('search-form');
@@ -92,7 +92,3 @@ function showLoadMoreButton() {
 function hideLoadMoreButton() {
   loadMoreButton.style.display = 'none';
 }
-
-    
-    
-    
