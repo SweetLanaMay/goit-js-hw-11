@@ -61,16 +61,16 @@ const createPhotoCard = hits => {
   loading="lazy" />
   <div class="info">
     <p class="info-item">
-      <b>${hits.likes}</b>
+      <b>Likes: </b>${hits.likes}
     </p>
     <p class="info-item">
-      <b>${hits.views}</b>
+      <b>Views: </b>${hits.views}
     </p>
     <p class="info-item">
-      <b>${hits.comments}</b>
+      <b>Comments: </b>${hits.comments}
     </p>
     <p class="info-item">
-      <b>${hits.downloads}</b>
+      <b>Downloads: </b>${hits.downloads}
     </p>
   </div>
 </div>`;
