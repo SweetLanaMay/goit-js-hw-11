@@ -1,9 +1,10 @@
-import { searchImages } from './api.js';
+import { searchImages, perPage } from './api.js';
 import Notiflix from 'notiflix';
 import getRefs from './refs.js';
+
 let page = 1;
-let prePage = 40;
 let currentSearchQuery = '';
+
 const refs = getRefs();
 
 refs.searchForm.addEventListener('submit', onSearch);
@@ -12,20 +13,20 @@ function onSearch(e) {
   e.preventDefault();
 
   const searchQuery = e.currentTarget.elements.searchQuery.value.trim();
-  console.log(searchQuery)
   if (searchQuery === '') return;
   currentSearchQuery = searchQuery;
-  page = 1;
+
   clearGallery();
-  refs.loadMoreButton.classList.add('hidden');
-  searchImages(searchQuery, page, prePage)
-    .then(data => {
+
+  refs.loadMoreButton.classList.remove('hidden');
+  page++;
+
+  searchImages(searchQuery, page)
+    .then(data =>
       data.hits.forEach(image => {
         createPhotoCard(image);
-      });
-      refs.loadMoreButton.classList.remove('hidden');
-      page++;
-    })
+      })
+    )
     .catch(error => {
       console.log(error);
       Notiflix.Notify.failure(
@@ -37,12 +38,13 @@ function onSearch(e) {
 refs.loadMoreButton.addEventListener('click', loadMoreImages);
 
 function loadMoreImages() {
-  searchImages(currentSearchQuery, page, prePage)
+  searchImages(currentSearchQuery, page)
     .then(data => {
       data.hits.forEach(hits => {
         createPhotoCard(hits);
       });
       page++;
+      refs.loadMoreButton.classList.remove('hidden');
     })
     .catch(error => {
       console.log(error);
@@ -51,8 +53,6 @@ function loadMoreImages() {
       );
     });
 }
-
-
 
 const createPhotoCard = hits => {
   const markupPhotoCard = `<div class="photo-card">
@@ -75,7 +75,7 @@ const createPhotoCard = hits => {
   </div>
 </div>`;
 
-  refs.gallery.innerHTML = markupPhotoCard;
+  refs.gallery.insertAdjacentHTML('beforeend', markupPhotoCard);
 };
 
 function clearGallery() {
